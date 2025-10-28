@@ -12,12 +12,12 @@ public class login_type {
        this.con = con;
    }
    
-   public user_login loginUser(String username, String password) throws SQLException {
-       String sql = "SELECT UserID, Name, Type FROM tbl_User WHERE Username = ? AND Password = ?";
+   public user_login loginUser(String u_email, String password) throws SQLException {
+       String sql = "SELECT UserID, Name, Type FROM tbl_User WHERE Email = ? AND Password = ?";
        try(Connection connec = con.openConnection();
         PreparedStatement pst = connec.prepareStatement(sql)) {
          
-           pst.setString(1, username);
+           pst.setString(1, u_email);
            pst.setString(2, password);
            
            try (ResultSet rs = pst.executeQuery()){
