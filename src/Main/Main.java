@@ -1,4 +1,4 @@
-package Main;
+ package Main;
 
 import Config.Config;
 import java.sql.SQLException;
@@ -233,7 +233,8 @@ public class Main {
                     break;
 
                 case 3:
-                    System.exit(3);
+                    System.exit(0);
+                    System.out.println("Exit Menu...");
                     break;
 
                 default:

@@ -37,6 +37,7 @@ public class Admin {
     }
 
     public void Admin() {
+        while(true){
         System.out.println("=== ADMIN DASHBOARD ===");
         System.out.println("1. Approve Account");
         System.out.println("2. Manage Accounts");
@@ -73,298 +74,284 @@ public class Admin {
                 attempts--;
                 System.out.println("Attempts left: " + attempts);
             }
-
-            if(attempts == 0){
-                System.out.println("Too many invalid attempts.");
-                attempts--;
-                System.out.println("Attempts left: " + attempts);
-                break;
-            }
         }
 
         switch (respp) {
+            // APPROVE ACCOUNT
             case 1:
-                viewUsers();                   
-                System.out.print("Enter ID to Approve ( or 0 to cancel): ");
+                viewUsers();                    
+                System.out.print("Enter ID to Approve (or 0 to cancel): ");
                 int ids = sr.nextInt();
+                sr.nextLine(); // FIX
+
                 if(ids == 0){
                     System.out.println("Approve Account cancelled!");
-                    return;
+                    break;
                 }
+
                 String sql = "UPDATE tbl_user SET Status = ? WHERE UserID = ?";
                 con.updateRecord(sql, "Approved", ids);
-                System.out.println(" Account approved successfully!");
+                System.out.println("Account approved successfully!");
                 break; 
 
+            // MANAGE ACCOUNTS
             case 2:
-                System.out.println("===================");  
-                System.out.println("1. View Account");
-                System.out.println("2. Delete Account");
-                System.out.println("3. Back");
-                System.out.println("===================");
+                while(true){
+                    System.out.println("===================");  
+                    System.out.println("1. View Account");
+                    System.out.println("2. Delete Account");
+                    System.out.println("3. Back");
+                    System.out.println("===================");
 
-                int c_ac = 0;
-                attempts = 3;
+                    int c_ac = 0;
+                    attempts = 3;
 
-                while(attempts > 0){
-                    System.out.print("Enter Choice: ");
-                    String input = sr.nextLine().trim();
+                    while(attempts > 0){
+                        System.out.print("Enter Choice: ");
+                        String input = sr.nextLine().trim();
 
-                    if(input.isEmpty()){
-                        System.out.println("You didn't type anything. Enter a number (1 to 3) only.");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
-                        continue;
-                    }
-
-                    try {
-                        c_ac = Integer.parseInt(input);
-                        if(c_ac >= 1 && c_ac <= 3){
-                            break;
-                        } else {
-                            System.out.println("Invalid choice. Enter 1 to 3 only.");
+                        if(input.isEmpty()){
+                            System.out.println("You didn't type anything. Enter a number (1 to 3) only.");
                             attempts--;
-                            System.out.println("Attempts left: " + attempts);
+                            continue;
                         }
-                    } catch(NumberFormatException e){ 
-                        System.out.println("Invalid input. Please enter digits only.");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
+
+                        try {
+                            c_ac = Integer.parseInt(input);
+                            if(c_ac >= 1 && c_ac <= 3){
+                                break;
+                            } else {
+                                System.out.println("Invalid choice. Enter 1 to 3 only.");
+                                attempts--;
+                            }
+                        } catch(NumberFormatException e){ 
+                            System.out.println("Invalid input. Please enter digits only.");
+                            attempts--;
+                        }
                     }
 
-                    if(attempts == 0){
-                        System.out.println("Too many invalid attempts.");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
-                        break;
-                    }
-                }
+                    switch(c_ac){
+                        case 1:
+                            viewUsers();
+                            break;  
+                        case 2:
+                            viewUsers();
+                            System.out.println("Enter Id to Delete (or 0 to cancel): ");
+                            int a_id = sr.nextInt();
+                            sr.nextLine(); // FIX
 
-                switch(c_ac){
-                    case 1:
-                        viewUsers();
-                        break;  
-                    case 2:
-                        viewUsers();
-                        System.out.println("Enter Id to Delete (or 0 to cancel): ");
-                        int a_id = sr.nextInt();
-                        if(a_id == 0){
-                            System.out.println("Delete Cancelled.");
-                            return;
-                        }        
-                        String sqlDelete = "DELETE FROM tbl_User WHERE UserID = ?";
-                        con.deleteRecord(sqlDelete, a_id);
-                        System.out.println("Deleted Successfully.");
-                        viewUsers();
-                        break;
-                    case 3:
-                        return;
+                            if(a_id == 0){
+                                System.out.println("Delete Cancelled.");
+                                break;
+                            }        
+
+                            String sqlDelete = "DELETE FROM tbl_User WHERE UserID = ?";
+                            con.deleteRecord(sqlDelete, a_id);
+                            System.out.println("Deleted Successfully.");
+                            viewUsers();
+                            break;
+                        case 3:
+                            // back to admin menu
+                            break;
+                    }
+
+                    if(c_ac == 3) break;
                 }
                 break;
 
+            // MANAGE PRODUCT
             case 3:
-                System.out.println("===================");  
-                System.out.println("1. View Product");
-                System.out.println("2. Delete Product");
-                System.out.println("3. Back");
-                System.out.println("===================");
+                while(true){
+                    System.out.println("===================");  
+                    System.out.println("1. View Product");
+                    System.out.println("2. Delete Product");
+                    System.out.println("3. Back");
+                    System.out.println("===================");
 
-                int c_pr = 0;
-                attempts = 3;
+                    int c_pr = 0;
+                    attempts = 3;
 
-                while(attempts > 0){
-                    System.out.print("Enter choice: ");    
-                    String input = sr.nextLine().trim();
+                    while(attempts > 0){
+                        System.out.print("Enter choice: ");    
+                        String input = sr.nextLine().trim();
 
-                    if(input.isEmpty()){
-                        System.out.println("You didn't type anything. Enter a number (1 to 3)");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
-                        continue;
-                    }
-
-                    try {
-                        c_pr = Integer.parseInt(input);
-                        if(c_pr >= 1 && c_pr <= 3){
-                            break;
-                        } else {
-                            System.out.println("Invalid choice. Enter 1 to 6 only.");
+                        if(input.isEmpty()){
+                            System.out.println("You didn't type anything. Enter a number (1 to 3)");
                             attempts--;
-                            System.out.println("Attempts left: " + attempts);
+                            continue;
                         }
-                    } catch(NumberFormatException e){ 
-                        System.out.println("Invalid input. Please enter digits only.");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
+
+                        try {
+                            c_pr = Integer.parseInt(input);
+                            if(c_pr >= 1 && c_pr <= 3){
+                                break;
+                            } else {
+                                System.out.println("Invalid choice.");
+                                attempts--;
+                            }
+                        } catch(NumberFormatException e){ 
+                            System.out.println("Invalid input.");
+                            attempts--;
+                        }
                     }
 
-                    if(attempts == 0){
-                        System.out.println("Too many invalid attempts.");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
-                        break;
-                    }
-                }
+                    switch(c_pr){
+                        case 1:
+                            viewProducts();
+                            break;
+                        case 2:
+                            viewProducts();
+                            System.out.print("Enter Product Id to Delete (or 0 to cancel): ");
+                            int id = sr.nextInt();
+                            sr.nextLine(); // FIX
 
-                switch(c_pr){
-                    case 1:
-                        viewProducts();
-                        break;
-                    case 2:
-                        viewProducts();
-                        System.out.print("Enter Product Id to Delete (or 0 to cancel): ");
-                        int id = sr.nextInt();
-                        if(id == 0){
-                            System.out.println("Delete Cancelled.");
-                            return;   
-                        }                    
-                        con.deleteRecord("DELETE FROM tbl_Products WHERE ProductID = ?", id);
-                        System.out.println("Product Deleted Successfully.");
-                        viewProducts();
-                        break;
-                    case 3:
-                        return;
+                            if(id == 0){
+                                System.out.println("Delete Cancelled.");
+                                break;   
+                            }                    
+                            con.deleteRecord("DELETE FROM tbl_Products WHERE ProductID = ?", id);
+                            System.out.println("Product Deleted Successfully.");
+                            viewProducts();
+                            break;
+                        case 3:
+                            break;
+                    }
+
+                    if(c_pr == 3) break;
                 }
                 break;
 
+            // MANAGE ORDER
             case 4:
-                System.out.println("=================");
-                System.out.println("1. View Order");
-                System.out.println("2. Delete Order");
-                System.out.println("3. Back");
-                System.out.println("=================");
+                while(true){
+                    System.out.println("=================");
+                    System.out.println("1. View Order");
+                    System.out.println("2. Delete Order");
+                    System.out.println("3. Back");
+                    System.out.println("=================");
 
-                int c_or = 0;
-                attempts = 3;
+                    int c_or = 0;
+                    attempts = 3;
 
-                while(attempts > 0){
-                    System.out.print("Enter choice: ");    
-                    String input = sr.nextLine().trim();
+                    while(attempts > 0){
+                        System.out.print("Enter choice: ");    
+                        String input = sr.nextLine().trim();
 
-                    if(input.isEmpty()){
-                        System.out.println("You didn't type anything. Enter a number (1 to 3)");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
-                        continue;
-                    }
-
-                    try {
-                        c_or = Integer.parseInt(input);
-                        if(c_or >= 1 && c_or <= 3){
-                            break;
-                        } else {
-                            System.out.println("Invalid choice. Enter 1 to 3 only.");
+                        if(input.isEmpty()){
+                            System.out.println("You didn't type anything.");
                             attempts--;
-                            System.out.println("Attempts left: " + attempts);
+                            continue;
                         }
-                    } catch(NumberFormatException e){ 
-                        System.out.println("Invalid input. Please enter digits only.");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
+
+                        try {
+                            c_or = Integer.parseInt(input);
+                            if(c_or >= 1 && c_or <= 3){
+                                break;
+                            } else {
+                                System.out.println("Invalid choice.");
+                                attempts--;
+                            }
+                        } catch(NumberFormatException e){ 
+                            System.out.println("Invalid input.");
+                            attempts--;
+                        }
                     }
 
-                    if(attempts == 0){
-                        System.out.println("Too many invalid attempts.");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
-                        break;
-                    }
-                }
+                    switch(c_or){
+                        case 1:
+                            viewOrders();
+                            break;
+                        case 2:
+                            viewOrders();
+                            System.out.print("Enter Order Id to delete (or 0 to cancel): ");
+                            int o_id = sr.nextInt();
+                            sr.nextLine(); // FIX
 
-                switch(c_or){
-                    case 1:
-                        viewOrders();
-                        break;
-                    case 2:
-                        viewOrders();
-                        System.out.print("Enter Order Id to delete (or 0 to cancels): ");
-                        int o_id = sr.nextInt();
-                        if(o_id == 0){
-                            System.out.println("Delete Cancelled.");
-                            return;   
-                        }                            
-                        con.deleteRecord("DELETE FROM tbl_Order WHERE OrderID = ?", o_id);
-                        System.out.println("Order Deleted Successfully.");
-                        viewOrders();
-                        break;
-                    case 3:
-                        return;    
+                            if(o_id == 0){
+                                System.out.println("Delete Cancelled.");
+                                break;   
+                            }                            
+                            con.deleteRecord("DELETE FROM tbl_Order WHERE OrderID = ?", o_id);
+                            System.out.println("Order Deleted Successfully.");
+                            viewOrders();
+                            break;
+                        case 3:
+                            break;    
+                    }
+
+                    if(c_or == 3) break;
                 }
                 break;
 
+            // SALES TRACK
             case 5:
-                System.out.println("1. Daily Sales");
-                System.out.println("2. Sales by Date Range");
-                System.out.println("3. Top Selling Products");
-                System.out.println("4. Back");
+                while(true){
+                    System.out.println("1. Daily Sales");
+                    System.out.println("2. Sales by Date Range");
+                    System.out.println("3. Top Selling Products");
+                    System.out.println("4. Back");
 
-                int admin_choice = 0;
-                attempts = 3;
+                    int admin_choice = 0;
+                    attempts = 3;
 
-                while(attempts > 0){
-                    System.out.print("Enter choice: ");    
-                    String input = sr.nextLine().trim();
+                    while(attempts > 0){
+                        System.out.print("Enter choice: ");    
+                        String input = sr.nextLine().trim();
 
-                    if(input.isEmpty()){
-                        System.out.println("You didn't type anything. Enter a number (1 to 4)");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
-                        continue;
-                    }
-
-                    try {
-                        admin_choice = Integer.parseInt(input);
-                        if(admin_choice >= 1 && admin_choice <= 4){
-                            break;
-                        } else {
-                            System.out.println("Invalid choice. Enter 1 to 4 only.");
+                        if(input.isEmpty()){
+                            System.out.println("You didn't type anything.");
                             attempts--;
-                            System.out.println("Attempts left: " + attempts);
+                            continue;
                         }
-                    } catch(NumberFormatException e){ 
-                        System.out.println("Invalid input. Please enter digits only.");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
+
+                        try {
+                            admin_choice = Integer.parseInt(input);
+                            if(admin_choice >= 1 && admin_choice <= 4){
+                                break;
+                            } else {
+                                System.out.println("Invalid choice.");
+                                attempts--;
+                            }
+                        } catch(NumberFormatException e){ 
+                            System.out.println("Invalid input.");
+                            attempts--;
+                        }    
                     }
 
-                    if(attempts == 0){
-                        System.out.println("Too many invalid attempts.");
-                        attempts--;
-                        System.out.println("Attempts left: " + attempts);
-                        break;
-                    }    
-                }
+                    switch(admin_choice){
+                        case 1:
+                            String dailySale_qry = "SELECT SUM(TotalPrice) FROM tbl_Order WHERE date"
+                                    + "(OrderDate) = date('now', 'localtime')";
+                            double dailySales = con.getSingleValue(dailySale_qry);
+                            System.out.println("-----------------------");
+                            System.out.println("Total Sales for Today: " + dailySales);
+                            System.out.println("-----------------------");
+                            break;
 
-                switch(admin_choice){
-                    case 1:
-                        String dailySale_qry = "SELECT SUM(TotalPrice) FROM tbl_Order WHERE date"
-                                + "(OrderDate) = date('now', 'localtime')";
-                        double dailySales = con.getSingleValue(dailySale_qry);
-                        System.out.println("-----------------------");
-                        System.out.println("Total Sales for Today: " + dailySales);
-                        System.out.println("-----------------------");
-                        break;
-                    case 2:
-                        System.out.print("Enter Start Date (YYYY-MM-DD): ");
-                        String startDate = sr.next();
-                        System.out.print("Enter End Date (YYYY-MM-DD): ");
-                        String endDate = sr.next();
-                        sr.nextLine();
+                        case 2:
+                            System.out.print("Enter Start Date (YYYY-MM-DD): ");
+                            String startDate = sr.next();
+                            System.out.print("Enter End Date (YYYY-MM-DD): ");
+                            String endDate = sr.next();
+                            sr.nextLine(); // FIX
 
-                        String dateRange_qry = "SELECT SUM(TotalPrice) FROM tbl_Order WHERE OrderDate BETWEEN ? AND ?";
-                        double rangesales = con.getSingleValue(dateRange_qry);
-                        System.out.println("-----------------------------------------------------");
-                        System.out.println("Total Sales from " + startDate + " to " + endDate);
-                        System.out.println("Range Sales: "+ rangesales);
-                        System.out.println("-----------------------------------------------------");
-                        break;
-                    case 3:
-                        viewTopSales();
-                        break;
-                    case 4:
-                        return;    
-                    default:
-                        System.out.println("Invalid Choice.");
+                            String dateRange_qry = "SELECT SUM(TotalPrice) FROM tbl_Order WHERE OrderDate BETWEEN ? AND ?";
+                            double rangesales = con.getSingleValue(dateRange_qry);
+                            System.out.println("-----------------------------------------------------");
+                            System.out.println("Total Sales from " + startDate + " to " + endDate);
+                            System.out.println("Range Sales: "+ rangesales);
+                            System.out.println("-----------------------------------------------------");
+                            break;
+
+                        case 3:
+                            viewTopSales();
+                            break;
+
+                        case 4:
+                            break;
+                    }
+
+                    if(admin_choice == 4) break;
                 }
                 break;
 
@@ -372,4 +359,5 @@ public class Admin {
                 return;
         }
     }
+}
 }
